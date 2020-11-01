@@ -4,7 +4,7 @@ WORKDIR $GOPATH/src/github.com/mmaysonet74/snpt
 
 # manage dependencies
 COPY go.mod .
-# COPY go.sum .
+COPY go.sum .
 RUN go mod download
 
 # Copy src code from the host and compile it
