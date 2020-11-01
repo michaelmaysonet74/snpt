@@ -1,11 +1,15 @@
 FROM golang:1.15.3
 
-WORKDIR /go/src/app
-COPY ./cmd/snpt/main.go .
+ENV GO111MODULE=on
 
-# RUN go get -d -v
+WORKDIR /go/src/app
+
+COPY ./cmd/snpt/main.go .
+COPY ./go.mod .
+
+RUN go get -d -v
 RUN go install -v
 
-# EXPOSE <port> 
+EXPOSE 9090
 
 CMD ["app"]

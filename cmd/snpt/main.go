@@ -1,9 +1,14 @@
 package main
 
 import (
-	"fmt"
+	"log"
+
+	"github.com/michaelmaysonet74/snpt/internal/server"
 )
 
 func main() {
-	fmt.Println("Hello Go")
+	s := server.NewServer()
+	if err := s.Run(); err != nil {
+		log.Fatalln(err)
+	}
 }
