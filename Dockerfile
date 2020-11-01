@@ -1,15 +1,16 @@
 FROM golang:1.15.3
 
-ENV GO111MODULE=on
+WORKDIR $GOPATH/src/github.com/mmaysonet74/snpt
 
-WORKDIR /go/src/app
+# manage dependencies
+COPY go.mod .
+# COPY go.sum .
+RUN go mod download
 
-COPY ./cmd/snpt/main.go .
-COPY ./go.mod .
-
-RUN go get -d -v
-RUN go install -v
+# Copy src code from the host and compile it
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -o /snpt cmd/snpt/main.go
 
 EXPOSE 9090
 
-CMD ["app"]
+CMD ["/snpt"]

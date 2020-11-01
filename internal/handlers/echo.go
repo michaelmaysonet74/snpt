@@ -15,7 +15,7 @@ func NewEcho(l *log.Logger) *Echo {
 }
 
 func (e *Echo) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	e.l.Println("POST")
+	e.l.Println("POST /echo")
 	w.Header().Add("Content-Type", "application/json")
 
 	body, err := ioutil.ReadAll(r.Body)

@@ -3,11 +3,23 @@
 snpt API is a RESTful API built in golang meant to be used by the snpt UI project.
 
 ## Version and Dependencies
+---
 
-The project is built in golang version @1.15.3 and uses Docker.
+The project is built in golang@1.15.3. We use Docker for packaging `snpt API` container.
 
-## Build and Run
+## Getting Started
+---
+
+### Run App Locally
 ```
-$ docker build -t snpt .
-$ docker run snpt
+$ make dev
+```
+To run the app locally, you will need to have intalled the proper golang version.
+
+### Build and Run Docker Container
+```
+$ make docker-build
+...
+...
+$ make docker-run
 ```
