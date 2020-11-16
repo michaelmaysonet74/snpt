@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  snpt:
+    image: snpt
+    ports:
+      - "9090:9090"
+    networks:
+      - snpt-service
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - snpt-service
+
+networks:
+  snpt-service:
+    driver: bridge
+
+volumes:
+    mongo-data:
+      driver: local
