@@ -10,10 +10,12 @@ import (
 func (s *Server) routes() {
 	// Dependencies
 	l := log.New(os.Stdout, "snpt-api", log.LstdFlags)
+	db := NewDB(s.config.DBClientURI, s.config.DBName)
 
 	// Handlers
-	sh := handlers.NewSnippets(l)
+	sh := handlers.NewSnippets(l, db)
 
 	// Routes
 	s.router.Handle("/snippets", sh)
+	s.router.Handle("/snippets/", sh)
 }

@@ -11,7 +11,7 @@ var SnippetList = Snippets{
 		IsLoved:   false,
 		CreatedOn: time.Now().UTC().String(),
 		UpdatedOn: time.Now().UTC().String(),
-		CreatedBy: UserList[0],
+		CreatedBy: UserList[0].ID,
 	},
 	&Snippet{
 		ID:    2,
@@ -27,7 +27,7 @@ var SnippetList = Snippets{
 		IsLoved:   true,
 		CreatedOn: time.Now().UTC().String(),
 		UpdatedOn: time.Now().UTC().String(),
-		CreatedBy: UserList[0],
+		CreatedBy: UserList[0].ID,
 	},
 }
 

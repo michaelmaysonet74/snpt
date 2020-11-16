@@ -15,6 +15,10 @@ type Server struct {
 	router *http.ServeMux
 }
 
+/**
+ *	Public Methods
+ */
+
 func NewServer() *Server {
 	return &Server{
 		config: NewConfig(),
