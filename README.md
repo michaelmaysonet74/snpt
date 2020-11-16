@@ -23,10 +23,7 @@ $ make dev
 ```
 To run the app locally, you will need to have intalled the proper golang version.
 
-### Build and Run Docker Container
+### Build Docker Container
 ```
 $ make docker-build
-...
-...
-$ make docker-run
 ```
