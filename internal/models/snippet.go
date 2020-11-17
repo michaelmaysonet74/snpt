@@ -1,18 +1,23 @@
 package models
 
 import (
-	"fmt"
+	"context"
+	"time"
+
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type Snippet struct {
-	ID        int    `json:"id"`
-	Title     string `json:"title"`
-	Content   string `json:"content"`
-	Language  string `json:"language"`
-	IsLoved   bool   `json:"isLoved"`
-	CreatedOn string `json:"-"`
-	UpdatedOn string `json:"-"`
-	CreatedBy int    `json:"createdBy"`
+	ID        primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
+	Title     string             `json:"title,omitempty" bson:"title,omitempty"`
+	Content   string             `json:"content,omitempty" bson:"content,omitempty"`
+	Language  string             `json:"language,omitempty" bson:"language,omitempty"`
+	IsLoved   bool               `json:"isLoved" bson:"isLoved,omitempty"`
+	CreatedOn primitive.DateTime `json:"-" bson:"createdOn,omitempty"`
+	UpdatedOn primitive.DateTime `json:"-" bson:"updatedOn,omitempty"`
+	CreatedBy primitive.ObjectID `json:"createdBy,omitempty" bson:"createdBy,omitempty"`
 }
 
 type Snippets []*Snippet
@@ -21,26 +26,13 @@ func generateID() int {
 	return len(SnippetList) + 1
 }
 
-func findSnippet(id int) (*Snippet, int, error) {
-	for i, s := range SnippetList {
-		if s.ID == id {
-			return s, i, nil
-		}
-	}
+func findSnippet(c *mongo.Collection, id primitive.ObjectID) (*Snippet, error) {
+	var snippet *Snippet
 
-	return nil, 0, fmt.Errorf("Error: Snippet with ID[%v] was not found", id)
-}
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 
-/**
- *	Public Methods
- */
-
-func GetSnippets() Snippets {
-	return SnippetList
-}
-
-func GetSnippetByID(id int) (*Snippet, error) {
-	snippet, _, err := findSnippet(id)
+	err := c.FindOne(ctx, bson.M{"_id": id}).Decode(&snippet)
 	if err != nil {
 		return nil, err
 	}
@@ -48,31 +40,72 @@ func GetSnippetByID(id int) (*Snippet, error) {
 	return snippet, nil
 }
 
-func CreateSnippet(s *Snippet) *Snippet {
-	s.ID = generateID()
+/**
+ *	Public Methods
+ */
+
+func GetSnippets(c *mongo.Collection) (Snippets, error) {
+	var snippets Snippets
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	cursor, err := c.Find(ctx, bson.M{})
+	if err != nil {
+		return nil, err
+	}
+
+	defer cursor.Close(ctx)
+
+	for cursor.Next(ctx) {
+		var snippet *Snippet
+		cursor.Decode(&snippet)
+		snippets = append(snippets, snippet)
+	}
+
+	return snippets, nil
+}
+
+func GetSnippetByID(c *mongo.Collection, id primitive.ObjectID) (*Snippet, error) {
+	return findSnippet(c, id)
+}
+
+func CreateSnippet(c *mongo.Collection, s *Snippet) (*Snippet, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	s.CreatedOn = primitive.NewDateTimeFromTime(time.Now())
 	s.CreatedBy = UserList[0].ID
 
-	SnippetList = append(SnippetList, s)
-	return s
-}
-
-func UpdateSnippet(id int, s *Snippet) (*Snippet, error) {
-	_, i, err := findSnippet(id)
+	result, err := c.InsertOne(ctx, s)
 	if err != nil {
 		return nil, err
 	}
 
-	SnippetList[i] = s
-	return s, nil
+	id := result.InsertedID.(primitive.ObjectID)
+	return findSnippet(c, id)
 }
 
-func DeleteSnippet(id int) (Snippets, error) {
-	_, i, err := findSnippet(id)
+func UpdateSnippet(c *mongo.Collection, id primitive.ObjectID, s *Snippet) (*Snippet, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	_, err := c.UpdateOne(ctx, Snippet{ID: id}, bson.M{"$set": s})
 	if err != nil {
 		return nil, err
 	}
 
-	// Remove found snippet from List
-	SnippetList = append(SnippetList[:i], SnippetList[i+1:]...)
-	return SnippetList, nil
+	return findSnippet(c, id)
+}
+
+func DeleteSnippet(c *mongo.Collection, id primitive.ObjectID) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	_, err := c.DeleteOne(ctx, Snippet{ID: id})
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

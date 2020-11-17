@@ -13,7 +13,9 @@ The project is built in golang@1.15.3.
 
 We use Docker for packaging `snpt API` container.
 
-MongoDB is the database used by the `snptAPI`. 
+`MongoDB` is the database used by the `snptAPI`.
+
+`gorilla/mux` is used as the router.
 
 ## Getting Started
 
