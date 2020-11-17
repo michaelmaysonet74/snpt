@@ -1,20 +1,24 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 var SnippetList = Snippets{
 	&Snippet{
-		ID:        1,
+		ID:        primitive.NewObjectID(),
 		Title:     "Hello World",
 		Content:   "print('Hello World!')",
 		Language:  "Python",
 		IsLoved:   false,
-		CreatedOn: time.Now().UTC().String(),
-		UpdatedOn: time.Now().UTC().String(),
+		CreatedOn: primitive.NewDateTimeFromTime(time.Now()),
+		UpdatedOn: primitive.NewDateTimeFromTime(time.Now()),
 		CreatedBy: UserList[0].ID,
 	},
 	&Snippet{
-		ID:    2,
+		ID:    primitive.NewObjectID(),
 		Title: "Sum Two Numbers",
 		Content: `
 			function add(a, b) {
@@ -25,15 +29,15 @@ var SnippetList = Snippets{
 		`,
 		Language:  "JavaScript",
 		IsLoved:   true,
-		CreatedOn: time.Now().UTC().String(),
-		UpdatedOn: time.Now().UTC().String(),
+		CreatedOn: primitive.NewDateTimeFromTime(time.Now()),
+		UpdatedOn: primitive.NewDateTimeFromTime(time.Now()),
 		CreatedBy: UserList[0].ID,
 	},
 }
 
 var UserList = []*User{
 	&User{
-		ID:        1,
+		ID:        primitive.NewObjectID(),
 		FirstName: "Michael",
 		LastName:  "Maysonet",
 		Email:     "michaelmaysonet@test.com",

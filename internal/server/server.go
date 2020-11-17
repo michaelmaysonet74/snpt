@@ -7,12 +7,17 @@ import (
 	"os"
 	"os/signal"
 	"time"
+
+	"go.mongodb.org/mongo-driver/mongo"
+
+	"github.com/gorilla/mux"
 )
 
 // Server holds everything needed by the API
 type Server struct {
 	config *Config
-	router *http.ServeMux
+	router *mux.Router
+	db     *mongo.Database
 }
 
 /**
@@ -22,12 +27,20 @@ type Server struct {
 func NewServer() *Server {
 	return &Server{
 		config: NewConfig(),
-		router: http.NewServeMux(),
+		router: mux.NewRouter(),
 	}
 }
 
 // Run is used as the service initializer
 func (s *Server) Run() {
+	client, ctx := s.NewDBClient()
+	defer func() {
+		if err := client.Disconnect(ctx); err != nil {
+			panic(err)
+		}
+	}()
+
+	s.db = client.Database(s.config.DBName)
 	s.routes()
 
 	server := &http.Server{

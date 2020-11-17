@@ -10,11 +10,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
-func NewDB(dbURI string, dbName string) *mongo.Database {
+func (s *Server) NewDBClient() (*mongo.Client, context.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(dbURI))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(s.config.DBClientURI))
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -24,5 +24,5 @@ func NewDB(dbURI string, dbName string) *mongo.Database {
 		log.Fatalln(err)
 	}
 
-	return client.Database(dbName)
+	return client, ctx
 }
