@@ -8,14 +8,14 @@ import (
 
 var SnippetList = Snippets{
 	&Snippet{
-		ID:        primitive.NewObjectID(),
-		Title:     "Hello World",
-		Content:   "print('Hello World!')",
-		Language:  "Python",
-		IsLoved:   false,
-		CreatedOn: primitive.NewDateTimeFromTime(time.Now()),
-		UpdatedOn: primitive.NewDateTimeFromTime(time.Now()),
-		CreatedBy: UserList[0].ID,
+		ID:            primitive.NewObjectID(),
+		Title:         "Hello World",
+		Content:       "print('Hello World!')",
+		FileExtension: ".py",
+		IsLoved:       false,
+		CreatedOn:     primitive.NewDateTimeFromTime(time.Now()),
+		UpdatedOn:     primitive.NewDateTimeFromTime(time.Now()),
+		CreatedBy:     UserList[0].ID,
 	},
 	&Snippet{
 		ID:    primitive.NewObjectID(),
@@ -27,11 +27,11 @@ var SnippetList = Snippets{
 
 			console.log(add(7, 4));
 		`,
-		Language:  "JavaScript",
-		IsLoved:   true,
-		CreatedOn: primitive.NewDateTimeFromTime(time.Now()),
-		UpdatedOn: primitive.NewDateTimeFromTime(time.Now()),
-		CreatedBy: UserList[0].ID,
+		FileExtension: ".js",
+		IsLoved:       true,
+		CreatedOn:     primitive.NewDateTimeFromTime(time.Now()),
+		UpdatedOn:     primitive.NewDateTimeFromTime(time.Now()),
+		CreatedBy:     UserList[0].ID,
 	},
 }
 
