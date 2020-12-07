@@ -10,14 +10,14 @@ import (
 )
 
 type Snippet struct {
-	ID        primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
-	Title     string             `json:"title,omitempty" bson:"title,omitempty"`
-	Content   string             `json:"content,omitempty" bson:"content,omitempty"`
-	Language  string             `json:"language,omitempty" bson:"language,omitempty"`
-	IsLoved   bool               `json:"isLoved" bson:"isLoved,omitempty"`
-	CreatedOn primitive.DateTime `json:"-" bson:"createdOn,omitempty"`
-	UpdatedOn primitive.DateTime `json:"-" bson:"updatedOn,omitempty"`
-	CreatedBy primitive.ObjectID `json:"createdBy,omitempty" bson:"createdBy,omitempty"`
+	ID            primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
+	Title         string             `json:"title,omitempty" bson:"title,omitempty"`
+	Content       string             `json:"content,omitempty" bson:"content,omitempty"`
+	FileExtension string             `json:"fileExtension,omitempty" bson:"fileExtension,omitempty"`
+	IsLoved       bool               `json:"isLoved" bson:"isLoved,omitempty"`
+	CreatedOn     primitive.DateTime `json:"-" bson:"createdOn,omitempty"`
+	UpdatedOn     primitive.DateTime `json:"-" bson:"updatedOn,omitempty"`
+	CreatedBy     primitive.ObjectID `json:"createdBy,omitempty" bson:"createdBy,omitempty"`
 }
 
 type Snippets []*Snippet
