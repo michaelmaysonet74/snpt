@@ -1,6 +1,6 @@
 # snpt API
 
-snpt API is a RESTful API built with the golang std library, meant to be used as a POC/case study.
+snpt API is a RESTful API built with the golang std library, meant to be a POC/case study.
 
 ## Models
 Snippet - a small and encapsulated string of code, data or script.
