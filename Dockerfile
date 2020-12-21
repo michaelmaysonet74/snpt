@@ -2,7 +2,7 @@ FROM golang:1.15.3
 
 WORKDIR $GOPATH/src/github.com/mmaysonet74/snpt
 
-# manage dependencies
+# Manage dependencies
 COPY go.mod .
 COPY go.sum .
 RUN go mod download
